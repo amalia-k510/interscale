@@ -6,10 +6,13 @@ from torch_geometric.nn import GATConv, MessagePassing
 
 from interscale.module.base import LocalModule
 
+
 class GAT(LocalModule):
     """Graph Attention Network (local module) - builds on PyTorch Geometric implementaiton."""
 
-    def __init__(self, n_layers: int = 2, hidden_dim: int = 16, heads: int = 4, dropout_local: float = 0.1, **base_module_kwargs):
+    def __init__(
+        self, n_layers: int = 2, hidden_dim: int = 16, heads: int = 4, dropout_local: float = 0.1, **base_module_kwargs
+    ):
 
         super().__init__(**base_module_kwargs)
 

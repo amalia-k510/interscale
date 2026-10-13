@@ -37,12 +37,12 @@ LABEL = "Cell_class"
 
 def look(adata):
     """Print what is in the downloaded object."""
-    print(adata) # summary
+    print(adata)  # summary
     print("\nCells per cell class:")
-    print(adata.obs[LABEL].value_counts(dropna=False).to_string()) # counting missing labels too
+    print(adata.obs[LABEL].value_counts(dropna=False).to_string())  # counting missing labels too
     print("\nCells per Bregma value (one value = one slice position):")
     print(adata.obs["Bregma"].value_counts().sort_index().to_string())
-    if "Animal_ID" in adata.obs: # everything comes from the same animal
+    if "Animal_ID" in adata.obs:  # everything comes from the same animal
         print(f"\nAnimals: {sorted(adata.obs['Animal_ID'].astype(str).unique())}")
 
 
@@ -50,7 +50,7 @@ def drop_control_probes(adata):
     # removing Black barcodes that match no gene and are used to measure
     # false detections = noise here
     """Remove 'Blank' barcodes: negative controls, not genes."""
-    blank = adata.var_names.str.lower().str.startswith("blank") # true/false
+    blank = adata.var_names.str.lower().str.startswith("blank")  # true/false
     if blank.any():
         # keeping everything that is not blank
         adata = adata[:, ~blank].copy()
@@ -94,14 +94,14 @@ def make_log_scaled(adata):
     adata.layers["original"] = adata.X.copy()
 
     values = adata.X.data if sparse.issparse(adata.X) else np.asarray(adata.X)
-    if np.allclose(values, np.round(values)): # are all values whole numbers?
+    if np.allclose(values, np.round(values)):  # are all values whole numbers?
         print("Whole numbers: raw counts. Normalising each cell to the same total, then log1p.")
         sc.pp.normalize_total(adata)
         sc.pp.log1p(adata)
-    elif xmax > 20: # check
+    elif xmax > 20:  # check
         print("Large values that aren't whole numbers: normalised but not logged. Applying log1p.")
         sc.pp.log1p(adata)
-    else: # in case if everything is alright
+    else:  # in case if everything is alright
         print("Small values that aren't whole numbers: already log-scaled. Leaving X as is.")
 
     adata.X = adata.X.astype(np.float32)
@@ -118,7 +118,7 @@ def coordinates_in_micrometres(adata):
     """
     first_slice = (adata.obs["Bregma"] == adata.obs["Bregma"].iloc[0]).to_numpy()
     xy = adata.obsm["spatial"][first_slice]
-    spacing = float(np.median(KDTree(xy).query(xy, k=2)[0][:, 1])) # finding 2 closest points
+    spacing = float(np.median(KDTree(xy).query(xy, k=2)[0][:, 1]))  # finding 2 closest points
     # the closest is itself at distance 0, and the second is its real nearest neighbor, so [:, 1]
     # Neighbouring cells are ~5-15 um apart, so a spacing below 0.1 can only mean millimetres.
     if spacing < 0.1:
@@ -157,9 +157,7 @@ def split_by_slice(adata, held_out_fraction=0.15):
     for j, i in enumerate(held):
         split[slices[i]] = "test" if j % 2 == 0 else "val"
     # copying the decision onto every cell
-    adata.obs["split"] = pd.Categorical(
-        adata.obs["slice"].astype(str).map(split), categories=["train", "val", "test"]
-    )
+    adata.obs["split"] = pd.Categorical(adata.obs["slice"].astype(str).map(split), categories=["train", "val", "test"])
 
     print(f"\nSplit ({n} slices, sorted by Bregma):")
     for s in slices:

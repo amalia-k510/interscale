@@ -1,6 +1,6 @@
 import warnings
 
-warnings.filterwarnings("ignore")  # noqa: E702
+warnings.filterwarnings("ignore")
 import sys
 from pathlib import Path
 

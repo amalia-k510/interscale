@@ -9,7 +9,7 @@ optim:
   accelerator: cpu                # I do not have NVIDIA GPU
   # defaults: up to 100 epochs, at least 40, LR warm-up 20, early stopping on val_f1_macro
 dataset:
-  h5ad_data: scripts/data/merfish_prepared.h5ad
+  h5ad_data: data/merfish_prepared.h5ad
   name: merfish_knn               # checkpoint files are named after this, so include the graph type
   prediction_task: classification # here choosing classification instead of regression
   prediction_obs: Cell_class

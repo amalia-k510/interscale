@@ -18,3 +18,6 @@ dataset:
   split_key: split
   batch_size: 8                   # one slice per training step; the default is 32 but training locally
   spatial_neigbors_kwargs: {radius: 29, library_key: slice}   # radius set to 50 by default
+wandb:
+  use: true
+  project_name: merfish-graphs

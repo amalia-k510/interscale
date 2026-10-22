@@ -8,12 +8,12 @@ Need to run only once from local_component_experiments
 Writes data/legnini_prepared.h5ad
 """
 
-import pandas as pd 
-import numpy as np
-import scanpy as sc
+import warnings
 from pathlib import Path
 
-import warnings
+import numpy as np
+import pandas as pd
+import scanpy as sc
 
 warnings.filterwarnings("ignore")
 
@@ -22,7 +22,7 @@ from interscale.pp import compute_neighborhood_stats
 
 # hardcoding the path for now
 DATA = "legnini"
-RAW = Path(f"data/raw/{DATA}.h5ad") 
+RAW = Path(f"data/raw/{DATA}.h5ad")
 OUT = Path(f"data/{DATA}_prepared.h5ad")
 
 # splitting data into training, testing, and validation
@@ -40,7 +40,7 @@ print(f"NaN values to begin with: {np.isnan(adata.obsm['spatial']).sum()}")
 # removing all cells tha thave entry NaN
 valid_coords = ~np.isnan(adata.obsm["spatial"]).any(axis=1)
 adata = adata[valid_coords].copy()
-#Verify the removal of NaN values
+# Verify the removal of NaN values
 print(f"NaN values remaining: {np.isnan(adata.obsm['spatial']).sum()}")
 
 # 1. Normalization = data needs to be normalized for Interscale
@@ -74,5 +74,3 @@ print(value_counts)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 adata.write(OUT)
 print(f"\n Saved {OUT}: {adata.n_obs} cells x {adata.n_vars} genes")
-
-

@@ -52,7 +52,9 @@ dm = GraphAnnDataModule(
 
 # 5. Train (tutorial: model.train(max_epochs=20, datamodule=dm, early_stopping=True, wandb_use=False)).
 #    train() also saves the best model to `model.save` from the YAML, so no separate model.save() is needed.
-model.train(max_epochs=cfg.optim.n_epochs, datamodule=dm, early_stopping=cfg.optim.early_stopping, wandb_use=cfg.wandb.use)
+model.train(
+    max_epochs=cfg.optim.n_epochs, datamodule=dm, early_stopping=cfg.optim.early_stopping, wandb_use=cfg.wandb.use
+)
 
 # 6. Save the metrics of every epoch (tutorial plots them instead). The filename has dataset name, GNN and seed,
 #    so runs never overwrite each other.

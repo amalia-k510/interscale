@@ -2,11 +2,11 @@
 model:
   local_component:  {name: GIN}
   global_component: {name: self-attn-transformer}   # not used by LocalModel, need to have to avoid errors
-  decoder: {type: linear}         
+  decoder: {type: linear}
   save: results/checkpoints/      # lets InterScale restore the best epoch
 optim:
   loss: GaussianNLL               # regression loss
-  accelerator: cpu                
+  accelerator: cpu
   n_epochs: 500
   min_epochs: 100
   patience: 50                    # early stopping on val_loss (regression)
@@ -16,9 +16,9 @@ dataset:
   prediction_task: regression
   prediction_level: node
   layer_key: log1p_norm           # normalised layer
-  sample_key: ['sample']          
+  sample_key: ['sample']
   split_key: split
-  batch_size: 1                   
+  batch_size: 1
   spatial_neigbors_kwargs: {radius: null, n_neighs: 10, library_key: sample}
 wandb:
   use: true
